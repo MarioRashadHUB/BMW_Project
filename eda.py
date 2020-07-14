@@ -65,4 +65,6 @@ df_cleaned['condition'] = df_cleaned['mileage'].apply(lambda x: 'new' if x < 500
 # dropping cars that have been sold for less then $1000.  Possibly had mechinical issues and can be outliers in dataset.
 df_cleaned = df_cleaned[df_cleaned['price'] > 1000]
 
+# export cleaned dataframe as csv
+df_cleaned.to_csv('bmw_cleaned.csv',index = False)
 
