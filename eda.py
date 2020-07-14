@@ -46,3 +46,23 @@ df_cleaned['model_index_inrange'] = df_cleaned['model_key_spaceless'].astype(str
 df_cleaned['MPower_yn'] = df_cleaned['model_index_inrange'].apply(lambda x: 'yes' if 'm' in x[0].lower() or x[2] == 'M' else 'no')
 df_cleaned.MPower_yn.value_counts()
 
+# determine if car is high milage or low milage
+df_cleaned = df_cleaned[df_cleaned['mileage'] > 0]
+df_cleaned['lowMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x < 99000 else 'no') 
+df_cleaned['highMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x > 150000 else 'no')
+df_cleaned['superHighMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x > 300000 else 'no')
+
+# determine if car is fast or not  
+# After analyzing the engine_power column, I realized that the column for the most part is very inaccurate and cannot be used.
+df_cleaned = df_cleaned[df_cleaned['engine_power'] > 0]
+df_cleaned['fast_yn'] = df_cleaned['engine_power'].apply(lambda x: 'yes' if x > 250 else 'no')
+df_cleaned = df_cleaned.drop(['engine_power'], axis=1)
+
+
+# determine if car is new or used
+df_cleaned['condition'] = df_cleaned['mileage'].apply(lambda x: 'new' if x < 50000 else 'used') 
+
+# dropping cars that have been sold for less then $1000.  Possibly had mechinical issues and can be outliers in dataset.
+df_cleaned = df_cleaned[df_cleaned['price'] > 1000]
+
+
