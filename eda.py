@@ -48,7 +48,7 @@ df_cleaned.MPower_yn.value_counts()
 
 # determine if car is high milage or low milage
 df_cleaned = df_cleaned[df_cleaned['mileage'] > 0]
-df_cleaned['lowMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x < 99000 else 'no') 
+df_cleaned['lowMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x < 99000 else 'no')
 df_cleaned['highMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x > 150000 else 'no')
 df_cleaned['superHighMiles_yn'] = df_cleaned['mileage'].apply(lambda x: 'yes' if x > 300000 else 'no')
 
@@ -64,6 +64,17 @@ df_cleaned['condition'] = df_cleaned['mileage'].apply(lambda x: 'new' if x < 500
 
 # dropping cars that have been sold for less then $1000.  Possibly had mechinical issues and can be outliers in dataset.
 df_cleaned = df_cleaned[df_cleaned['price'] > 1000]
+
+# determing if car was sold in fall, spring, summer, or winter.
+df_cleaned['sold_winter'] = df_cleaned['sold_at'].apply(lambda x: 'yes' if '1' in x[6] or '2' in x[6] else 'no')
+df_cleaned['sold_spring'] = df_cleaned['sold_at'].apply(lambda x: 'yes' if '3' in x[6] or '4' in x[6] or '5' in x[6] else 'no')
+df_cleaned['sold_summer'] = df_cleaned['sold_at'].apply(lambda x: 'yes' if '6' in x[6] or '7' in x[6] or '8' in x[6] else 'no')
+df_cleaned['sold_fall'] = df_cleaned['sold_at'].apply(lambda x: 'yes' if '9' in x[6] else 'no')
+
+# drop columns that were made that are no longer needed
+df_cleaned = df_cleaned.drop(['model_key_spaceless', 'model_index_inrange'], axis=1)
+
+
 
 # export cleaned dataframe as csv
 df_cleaned.to_csv('bmw_cleaned.csv',index = False)
