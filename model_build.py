@@ -58,6 +58,7 @@ from sklearn.model_selection import cross_val_score
 
 np.mean(cross_val_score(lm, X_train, y_train, scoring = 'neg_mean_absolute_error', cv= 10))
 
+
 # lasso regression  (L1 Regularization) (MAE = -3192.81)
 from sklearn.linear_model import Lasso
 
@@ -66,7 +67,6 @@ lm_las.fit(X_train, y_train)
 np.mean(cross_val_score(lm_las, X_train, y_train, scoring = 'neg_mean_absolute_error', cv= 10))
 
 # Find the optimal alpha
-
 alpha = []
 err = []
 
@@ -85,3 +85,23 @@ df_err[df_err.err == max(df_err.err)]
 lm_las = Lasso(0.99) # alpha defaults to 1
 lm_las.fit(X_train, y_train)
 np.mean(cross_val_score(lm_las, X_train, y_train, scoring = 'neg_mean_absolute_error', cv= 10))
+
+
+# Random Forrest
+from sklearn.ensemble import RandomForestRegressor
+
+rf = RandomForestRegressor(max_depth=2, random_state=0)
+
+np.mean(cross_val_score(rf, X_train, y_train, scoring = 'neg_mean_absolute_error', cv= 10))
+
+# Tuning Random Forest using GridSearch #-4948.302529166839
+from sklearn.model_selection import GridSearchCV
+
+params = {'n_estimators':range(10,100,10), 'criterion':('mse','mae'), 'max_features':('auto','sqrt','log2')}
+
+gs_rf = GridSearchCV(rf, params ,scoring = 'neg_mean_absolute_error', cv = 10)
+gs_rf.fit(X_train, y_train)
+
+gs_rf.best_score_
+gs_rf.best_estimator_
+
